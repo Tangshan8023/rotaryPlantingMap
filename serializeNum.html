@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>轮播图</title>
+    <style>
+        * {
+            margin:0;
+            padding:0;
+        }
+        ul{
+            list-style: none;
+        }
+        #rollDiv{
+            width: 400px;
+            height: 300px;
+            margin: 150px auto;
+            position: relative;
+            overflow: hidden;
+            background-color: deeppink;
+        }
+        #imgCon{
+            width: 2000px;
+            height: 300px;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+        }
+        .clearFloat:after{
+            display: block;
+            clear: both;
+            content: "";
+            height: 0;
+            visibility: hidden;
+        }
+        .clearFloat{
+            zoom: 1;
+        }
+        #imgCon>div{
+            width: 400px;
+            height: 300px;
+            float: left;
+        }
+        #imgCon img{
+            width: 400px;
+            height: 300px;
+        }
+        #leftBtn{
+            width: 30px;
+            height: 40px;
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.2);
+            top: 130px;
+            left: 0px;
+            z-index: 10;
+            cursor: pointer;
+        }
+        #leftBtn>img{
+            width: 30px;
+            height: 40px;
+        }
+        #rightBtn{
+            width: 30px;
+            height: 40px;
+            background-color: rgba(0, 0, 0, 0.2);
+            position: absolute;
+            top: 130px;
+            right: 0px;
+            z-index: 10;
+            cursor: pointer;
+        }
+        #rightBtn>img{
+            width: 30px;
+            height: 40px;
+        }
+        #uls{
+            width: 400px;
+            height: 20px;
+            position: absolute;
+            left: 0px;
+            bottom: 10px;
+            z-index: 10;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+        li{
+            width: 20px;
+            height: 20px;
+            background-color: rgba(255, 0, 0, 0.5);
+            border-radius: 10px;
+            font-size: 14px;
+            color: white;
+            text-align: center;
+            line-height: 20px;
+            margin: 0px 5px;
+            cursor: pointer;
+        }
+        .active{
+            background-color: red;
+        }
+    </style>
+</head>
+<body style="background-color: #f5f5f5;">
+<div id="rollDiv">
+    <!--轮播图-->
+    <div id="imgCon" class="clearFloat">
+        <div><img src="./img/a.jpg" alt=""></div>
+        <div><img src="./img/b.jpg" alt=""></div>
+        <div><img src="./img/c.jpg" alt=""></div>
+        <div><img src="./img/d.jpg" alt=""></div>
+        <div><img src="./img/e.jpg" alt=""></div>
+    </div>
+    <!--左右按钮-->
+    <div id="leftBtn"><img id="leftB" src="./img/left.png" alt=""></div>
+    <div id="rightBtn"><img id="rightB" src="./img/right.png" alt=""></div>
+    <!--小圆点-->
+    <ul id="uls">
+        <li class="active" data-id="0">1</li>
+        <li data-id="1">2</li>
+        <li data-id="2">3</li>
+        <li data-id="3">4</li>
+        <li data-id="4">5</li>
+    </ul>
+</div>
+<script>
+    var imgCon = document.getElementById("imgCon");
+    var btn = document.querySelectorAll("img[id]");
+    var lis = document.querySelectorAll("#uls li");
+
+    var positions = 0;
+    btn.forEach(function (bt) {
+        bt.addEventListener("click", clickHandler)
+    });
+    lis.forEach(function (liNode) {
+        liNode.addEventListener("click", clickLis);
+    });
+    function clickHandler(e) {
+        e= e || window.event;
+        /*
+        * e.currentTarget是当前点击的元素
+        * console.log(e.currentTarget);
+        * */
+        var btns = this.id;
+        /*
+        * this.id
+        * this表示当前调用该函数/方法的对象；
+        * 而this.id就是去该对象的ID属性值；
+        * */
+        if(btns === "leftB"){
+            positions--;
+            if(positions < 0) positions = 4;
+        }else if(btns === "rightB"){
+            positions++;
+
+            if(positions > 4) positions = 0;
+        }
+
+        for(var i=0; i<lis.length; i++){
+            lis[i].className = "";
+        }
+
+        lis[positions].className = "active";
+        imgCon.style.left = -positions*400 + "px";
+    }
+
+    function clickLis(e) {
+        e = e || window.event;
+        for(var i=0; i<lis.length; i++){
+            lis[i].className = "";
+            if(lis[i] === this){
+                console.log(lis[i], this);
+                positions = i;
+                imgCon.style.left = -positions*400 + "px";
+            }
+        }
+        this.className = "active";
+
+    }
+
+</script>
+</body>
+</html>
